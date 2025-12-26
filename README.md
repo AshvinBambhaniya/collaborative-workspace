@@ -61,6 +61,12 @@ The easiest way to run the full application is using Docker Compose.
     *   **Backend API**: `http://localhost:3000`
     *   **API Documentation**: `http://localhost:3000/api/docs`
 
+4.  **Database Migrations**:
+    The database schema is automatically synced on startup. To manually trigger a sync:
+    ```bash
+    docker exec pm_backend npx prisma db push
+    ```
+
 ## Local Development Setup
 
 If you prefer to run services locally:
