@@ -1,54 +1,108 @@
-# Purple Merit Backend Assessment
+# Real-Time Collaborative Workspace
 
-This is the submission for the Full Stack Developer Backend Assessment. It is a Real-Time Collaborative Workspace Backend.
+A production-grade full-stack application for real-time code collaboration, featuring secure authentication, workspace management, live coding with cursor tracking, and asynchronous job processing.
 
 ## Tech Stack
 
-*   **Runtime**: Node.js, TypeScript
-*   **Framework**: Express.js
-*   **Databases**: PostgreSQL (Prisma), MongoDB (Mongoose), Redis
-*   **Real-Time**: Socket.io (with Redis Adapter)
-*   **Queues**: BullMQ
-*   **DevOps**: Docker, Docker Compose
+### Backend
+*   **Runtime:** Node.js, TypeScript
+*   **Framework:** Express.js (Clean Architecture)
+*   **Databases:** 
+    *   **PostgreSQL** (Prisma ORM) - Relational data
+    *   **MongoDB** (Mongoose) - Logs & Job history
+    *   **Redis** - Caching, Rate Limiting, Pub/Sub, Queues
+*   **Real-Time:** Socket.io (with Redis Adapter)
+*   **Async Jobs:** BullMQ
+*   **Docs:** Swagger/OpenAPI
+
+### Frontend
+*   **Framework:** React 18 (Vite, TypeScript)
+*   **Styling:** Tailwind CSS v4
+*   **State Management:** TanStack Query (React Query)
+*   **Editor:** Monaco Editor (VS Code core)
+*   **Infrastructure:** Nginx (Production serving)
 
 ## Features
 
-1.  **Authentication**: JWT (Access + Refresh), RBAC.
-2.  **Workspaces & Projects**: CRUD operations with role checks.
-3.  **Real-Time**: WebSocket events for joining projects, file changes, and cursor movements.
-4.  **Async Jobs**: Code execution simulation with retry logic using BullMQ.
-5.  **Documentation**: Swagger API docs.
+1.  **Authentication & Security**:
+    *   JWT Access + Refresh Tokens.
+    *   Role-Based Access Control (Owner, Collaborator, Viewer).
+    *   API Rate Limiting & Helmet Security Headers.
+2.  **Workspace Management**:
+    *   Create and manage Workspaces and Projects.
+    *   Invite members via email.
+3.  **Real-Time Collaboration**:
+    *   Live code editing (broadcast changes).
+    *   User presence (join/leave notifications).
+    *   Scalable architecture using Redis Adapter.
+4.  **Code Execution System**:
+    *   Async job submission via API.
+    *   Background processing with BullMQ workers.
+    *   Real-time status polling.
 
-## Setup & Run
+## Quick Start (Docker)
+
+The easiest way to run the full application is using Docker Compose.
+
+1.  **Clone the repository**:
+    ```bash
+    git clone <repo-url>
+    cd purple-merit
+    ```
+
+2.  **Start the services**:
+    ```bash
+    docker-compose up --build -d
+    ```
+    This will spin up Postgres, MongoDB, Redis, Backend API, and Frontend App.
+
+3.  **Access the application**:
+    *   **Frontend**: `http://localhost:80` (or just `http://localhost`)
+    *   **Backend API**: `http://localhost:3000`
+    *   **API Documentation**: `http://localhost:3000/api/docs`
+
+## Local Development Setup
+
+If you prefer to run services locally:
 
 ### Prerequisites
-*   Docker & Docker Compose
+*   Node.js v25+
+*   PostgreSQL, MongoDB, Redis running locally.
 
-### Steps
-1.  Clone the repository.
-2.  Create a `.env` file (see `.env.example` or use provided defaults).
-3.  Run:
-    ```bash
-    docker-compose up --build
-    ```
-4.  The server will start on port 3000.
+### Backend
+1.  Navigate to root: `cd .`
+2.  Install dependencies: `npm install`
+3.  Setup Env: Create `.env` (copy defaults from `.env.example`).
+4.  Run Migrations: `npx prisma db push`
+5.  Start Dev Server: `npm run dev`
 
-## API Documentation
-
-Once the server is running, visit:
-`http://localhost:3000/api/docs`
+### Frontend
+1.  Navigate to frontend: `cd frontend`
+2.  Install dependencies: `npm install`
+3.  Start Dev Server: `npm run dev`
+4.  Open `http://localhost:5173`
 
 ## Architecture
 
-*   **Clean Architecture**: Controllers -> Services -> Repositories (Prisma/Mongoose).
-*   **Scalability**:
-    *   **Stateless API**: Can be horizontally scaled behind a load balancer.
-    *   **Socket.io**: Uses Redis Adapter to broadcast events across multiple instances.
-    *   **BullMQ**: Redis-based queue allows multiple workers to process jobs.
+```mermaid
+graph TD
+    Client[React Frontend] -->|REST API| LB[Load Balancer / Nginx]
+    Client -->|WebSocket| Socket[Socket.io Server]
+    
+    LB --> API[Node.js API Server]
+    
+    API --> Postgres[(PostgreSQL)]
+    API --> Mongo[(MongoDB)]
+    API --> Redis[(Redis)]
+    
+    API --> Queue[BullMQ Job Queue]
+    Queue --> Worker[Background Worker]
+    Worker --> Mongo
+```
 
 ## Testing
 
-Run tests locally:
+Run integration tests for the backend:
 ```bash
 npm test
 ```
