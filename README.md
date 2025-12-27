@@ -2,6 +2,10 @@
 
 A production-grade full-stack application for real-time code collaboration, featuring secure authentication, workspace management, live coding with cursor tracking, and asynchronous job processing.
 
+## Demo
+
+[demo.webm](https://github.com/user-attachments/assets/3da5a605-1c2a-4b00-a861-88c594c6bbbe)
+
 ## Tech Stack
 
 ### Backend
