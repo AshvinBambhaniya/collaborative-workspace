@@ -50,8 +50,8 @@ The easiest way to run the full application is using Docker Compose.
 
 1.  **Clone the repository**:
     ```bash
-    git clone <repo-url>
-    cd purple-merit
+    git clone https://github.com/AshvinBambhaniya/collaborative-workspace.git
+    cd collaborative-workspace
     ```
 
 2.  **Start the services**:
@@ -60,16 +60,15 @@ The easiest way to run the full application is using Docker Compose.
     ```
     This will spin up Postgres, MongoDB, Redis, Backend API, and Frontend App.
 
-3.  **Access the application**:
-    *   **Frontend**: `http://localhost:80` (or just `http://localhost`)
-    *   **Backend API**: `http://localhost:3000`
-    *   **API Documentation**: `http://localhost:3000/api/docs`
-
-4.  **Database Migrations**:
-    The database schema is automatically synced on startup. To manually trigger a sync:
+3.  **Database Migrations**:
     ```bash
     docker exec pm_backend npx prisma db push
     ```
+
+4.  **Access the application**:
+    *   **Frontend**: `http://localhost:80` (or just `http://localhost`)
+    *   **Backend API**: `http://localhost:3000`
+    *   **API Documentation**: `http://localhost:3000/api/docs`
 
 ## Local Development Setup
 
